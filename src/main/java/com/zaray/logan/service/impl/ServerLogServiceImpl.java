@@ -1,4 +1,4 @@
-package com.zaray.logan.domain;
+package com.zaray.logan.service.impl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,17 +6,22 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerLog {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-	private String serverLogText;
-	private List<Player> listOfPlayers;
+import com.zaray.logan.service.ServerLogService;
+import com.zaray.logan.domain.Player;
+import com.zaray.logan.domain.ServerLog;
 
-	/*public void doTextAnalize() {
-		listOfPlayers = new ArrayList<Player>();
+@Service
+public class ServerLogServiceImpl implements ServerLogService {
+	
+
+	public void doTextAnalize(ServerLog serverLog) {
+		List<Player> listOfPlayers = new ArrayList<Player>();
 		Player youAsPlayer = new Player("You");
 		listOfPlayers.add(youAsPlayer);
-
-		BufferedReader bufferedReader = new BufferedReader(new StringReader(serverLogText));
+		BufferedReader bufferedReader = new BufferedReader(new StringReader(serverLog.getServerLogText()));
 		String currentStringLine;
 		try {
 			while ((currentStringLine = bufferedReader.readLine()) != null) {
@@ -35,13 +40,11 @@ public class ServerLog {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		for (Player currentPlayer : listOfPlayers) {
-			System.out.println("Name : " + currentPlayer.getPlayerName());
-			System.out.println("DPS : " + currentPlayer.getPlayerDamageDone());
-		}
+		serverLog.setListOfPlayers(listOfPlayers);
 	}
 
-	private double foundDamageInLine(String[] splitLine) {
+	@Override
+	public double foundDamageInLine(String[] splitLine) {
 		double currentDamage = 0;
 		for (int i = splitLine.length - 1; i > 0; i--)
 			if (splitLine[i].equals("hitpoints"))
@@ -49,12 +52,13 @@ public class ServerLog {
 		return currentDamage;
 	}
 
-	private void countPlayerDamage(Player currentPlayer, double tempDamageFromLine) {
+	@Override
+	public void countPlayerDamage(Player currentPlayer, double tempDamageFromLine) {
 		currentPlayer.setPlayerDamageDone(currentPlayer.getPlayerDamageDone() + tempDamageFromLine);
-
 	}
 
-	private Player recognizePlayerName(String[] splitLine, List<Player> listOfPlayers) {
+	@Override
+	public Player recognizePlayerName(String[] splitLine, List<Player> listOfPlayers) {
 		int i = splitLine.length - 1;
 		String currentPlayerName = "";
 		String newPlayerName = "";
@@ -73,22 +77,6 @@ public class ServerLog {
 		Player recognizedPlayer = new Player(newPlayerName);
 		listOfPlayers.add(recognizedPlayer);
 		return recognizedPlayer;
-	}*/
-
-	public String getServerLogText() {
-		return serverLogText;
-	}
-
-	public void setServerLogText(String serverLog) {
-		this.serverLogText = serverLog;
-	}
-
-	public List<Player> getListOfPlayers() {
-		return listOfPlayers;
-	}
-
-	public void setListOfPlayers(List<Player> listOfPlayers) {
-		this.listOfPlayers = listOfPlayers;
 	}
 
 }

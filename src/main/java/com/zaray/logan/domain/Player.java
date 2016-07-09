@@ -5,7 +5,7 @@ public class Player {
 	private String playerName;
 	private double playerDamageDone;
 
-	Player(String name) {
+	public Player(String name) {
 		this.playerName = name;
 		this.playerDamageDone = 0;
 	}
